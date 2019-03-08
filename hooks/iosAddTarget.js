@@ -285,8 +285,6 @@ module.exports = function (context) {
           var productName = buildSettingsObj['PRODUCT_NAME'];
           if (productName.indexOf('ShareExt') >= 0) {
             buildSettingsObj['CODE_SIGN_ENTITLEMENTS'] = '"ShareExtension/ShareExtension.entitlements"';
-            buildSettingsObj['PROVISIONING_PROFILE'] = getCordovaParameter(configXml, 'PROVISIONING_PROFILE');
-            buildSettingsObj['DEVELOPMENT_TEAM'] = getCordovaParameter(configXml, 'DEVELOPMENT_TEAM');
           }
         }
       }

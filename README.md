@@ -50,9 +50,9 @@ cordova plugin add cordova-plugin-openwith \
 
 | variable | example | notes |
 |---|---|---|
-| `ANDROID_MIME_TYPES` | <data android:mimeType="image/*" /> | Mime types of documents you want to share (wildcards accepted) |
-| `IOS_URL_SCHEME` | uniquelonglowercase | Any random long string of lowercase alphabetical characters |
 | `DISPLAY_NAME` | My App Name | If you want to use a different name than your project name |
+| `IOS_BUNDLE_IDENTIFIER` | com.domain.app | Your app bundle identifier |
+| `IOS_URL_SCHEME` | uniquelonglowercase | Any random long string of lowercase alphabetical characters |
 
 It shouldn't be too hard. But just in case, Jean-Christophe Hoelt [posted a screencast of it](https://youtu.be/eaE4m_xO1mg).
 

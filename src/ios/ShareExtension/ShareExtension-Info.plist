@@ -26,6 +26,10 @@
             <dict>
                 <key>NSExtensionActivationRule</key>
                 <dict>
+                    <key>NSExtensionActivationUsesStrictMatching</key>
+                    <integer>0</integer>
+                    <key>NSExtensionActivationDictionaryVersion</key>
+                    <integer>2</integer>
                     <key>NSExtensionActivationSupportsAttachmentsWithMaxCount</key>
                     <integer>10</integer>
                     <key>NSExtensionActivationSupportsFileWithMaxCount</key>
@@ -41,10 +45,6 @@
                     <key>NSExtensionActivationSupportsWebPageWithMaxCount</key>
                     <integer>10</integer>
                 </dict>
-                <key>NSExtensionActivationUsesStrictMatching</key>
-                <integer>1</integer>
-                <key>NSExtensionActivationDictionaryVersion</key>
-                <integer>2</integer>
             </dict>
             <key>NSExtensionMainStoryboard</key>
             <string>MainInterface</string>

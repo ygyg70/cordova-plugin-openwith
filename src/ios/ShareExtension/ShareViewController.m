@@ -172,6 +172,8 @@
 
     // URL
     else if ([itemProvider hasItemConformingToTypeIdentifier:@"public.url"]) {
+      [self debug:[NSString stringWithFormat:@"item provider = %@", itemProvider]];
+
       [itemProvider loadItemForTypeIdentifier:@"public.url" options:nil completionHandler: ^(NSURL* item, NSError *error) {
         [self debug:[NSString stringWithFormat:@"public.url = %@", item]];
 
@@ -195,6 +197,8 @@
 
     // TEXT
     else if ([itemProvider hasItemConformingToTypeIdentifier:@"public.text"]) {
+      [self debug:[NSString stringWithFormat:@"item provider = %@", itemProvider]];
+
       [itemProvider loadItemForTypeIdentifier:@"public.text" options:nil completionHandler: ^(NSString* item, NSError *error) {
         [self debug:[NSString stringWithFormat:@"public.text = %@", item]];
 

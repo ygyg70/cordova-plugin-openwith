@@ -133,8 +133,45 @@
   for (NSItemProvider* itemProvider in ((NSExtensionItem*)self.extensionContext.inputItems[0]).attachments) {
     [self debug:[NSString stringWithFormat:@"item provider registered indentifiers = %@", itemProvider.registeredTypeIdentifiers]];
 
+    // IMAGE
+    if ([itemProvider hasItemConformingToTypeIdentifier:@"public.image"]) {
+      [self debug:[NSString stringWithFormat:@"item provider = %@", itemProvider]];
+
+      [itemProvider loadItemForTypeIdentifier:@"public.image" options:nil completionHandler: ^(NSURL* item, NSError *error) {
+        NSData *data = [NSData dataWithContentsOfURL:(NSURL*)item];
+        NSString *base64 = [data convertToBase64];
+        NSString *suggestedName = item.lastPathComponent;
+
+        NSString *uti = @"public.image";
+        NSString *registeredType = nil;
+
+        if ([itemProvider.registeredTypeIdentifiers count] > 0) {
+          registeredType = itemProvider.registeredTypeIdentifiers[0];
+        } else {
+          registeredType = uti;
+        }
+
+        NSString *mimeType =  [self mimeTypeFromUti:registeredType];
+        NSDictionary *dict = @{
+          @"text" : self.contentText,
+          @"data" : base64,
+          @"uti"  : uti,
+          @"utis" : itemProvider.registeredTypeIdentifiers,
+          @"name" : suggestedName,
+          @"type" : mimeType
+        };
+
+        [items addObject:dict];
+
+        --remainingAttachments;
+        if (remainingAttachments == 0) {
+          [self sendResults:results];
+        }
+      }];
+    }
+
     // URL
-    if ([itemProvider hasItemConformingToTypeIdentifier:@"public.url"]) {
+    else if ([itemProvider hasItemConformingToTypeIdentifier:@"public.url"]) {
       [itemProvider loadItemForTypeIdentifier:@"public.url" options:nil completionHandler: ^(NSURL* item, NSError *error) {
         [self debug:[NSString stringWithFormat:@"public.url = %@", item]];
 
@@ -170,43 +207,6 @@
           @"name": @"",
           @"type": [self mimeTypeFromUti:uti],
        };
-
-        [items addObject:dict];
-
-        --remainingAttachments;
-        if (remainingAttachments == 0) {
-          [self sendResults:results];
-        }
-      }];
-    }
-
-    // IMAGE
-    else if ([itemProvider hasItemConformingToTypeIdentifier:@"public.image"]) {
-      [self debug:[NSString stringWithFormat:@"item provider = %@", itemProvider]];
-
-      [itemProvider loadItemForTypeIdentifier:@"public.image" options:nil completionHandler: ^(NSURL* item, NSError *error) {
-        NSData *data = [NSData dataWithContentsOfURL:(NSURL*)item];
-        NSString *base64 = [data convertToBase64];
-        NSString *suggestedName = item.lastPathComponent;
-
-        NSString *uti = @"public.image";
-        NSString *registeredType = nil;
-
-        if ([itemProvider.registeredTypeIdentifiers count] > 0) {
-          registeredType = itemProvider.registeredTypeIdentifiers[0];
-        } else {
-          registeredType = uti;
-        }
-
-        NSString *mimeType =  [self mimeTypeFromUti:registeredType];
-        NSDictionary *dict = @{
-          @"text" : self.contentText,
-          @"data" : base64,
-          @"uti"  : uti,
-          @"utis" : itemProvider.registeredTypeIdentifiers,
-          @"name" : suggestedName,
-          @"type" : mimeType
-        };
 
         [items addObject:dict];
 

@@ -136,15 +136,6 @@ A data descriptor describe one file. It is a javascript object with the followin
 
 Load data for an item. For this modification, it is not necessary,
 
-### cordova.openwith.exit()
-
-Attempt to return the the calling app when sharing is done. Your app will be backgrounded,
-it should be able to finish the upload.
-
-Unfortnately, this is not working on iOS. The user can still select the
-"Back-to-app" button visible on the top left. Make sure your UI shows the user
-that he can now safely go back to what he was doing.
-
 ## Contribute
 
 Contributions in the form of GitHub pull requests are welcome. Please adhere to the following guidelines:

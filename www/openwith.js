@@ -172,11 +172,6 @@ function initOpenwithPlugin(root) {
         }
     };
 
-    openwith.exit = function() {
-        log(DEBUG, 'exit()');
-        cordova.exec(null, null, PLUGIN_NAME, 'exit', []);
-    };
-
     let onNewIntent = function(intent) {
         log(DEBUG, `onNewIntent(${intent.action})`);
         // process the new intent

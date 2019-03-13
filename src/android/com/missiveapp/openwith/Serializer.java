@@ -42,7 +42,6 @@ class Serializer {
         }
         final JSONObject action = new JSONObject();
         action.put("action", translateAction(intent.getAction()));
-        action.put("exit", readExitOnSent(intent.getExtras()));
         action.put("items", items);
         return action;
     }
@@ -55,16 +54,6 @@ class Serializer {
             return "VIEW";
         }
         return action;
-    }
-
-    /** Read the value of "exit_on_sent" in the intent's extra.
-     *
-     * Defaults to false. */
-    public static boolean readExitOnSent(final Bundle extras) {
-        if (extras == null) {
-            return false;
-        }
-        return extras.getBoolean("exit_on_sent", false);
     }
 
     /** Extract the list of items from clip data (if available).

@@ -49,11 +49,13 @@
 @end
 
 @interface ShareViewController : SLComposeServiceViewController <UIAlertViewDelegate> {
-  int _verbosityLevel;
+  NSFileManager *_fileManager;
   NSUserDefaults *_userDefaults;
+  int _verbosityLevel;
 }
-@property (nonatomic) int verbosityLevel;
+@property (nonatomic,retain) NSFileManager *fileManager;
 @property (nonatomic,retain) NSUserDefaults *userDefaults;
+@property (nonatomic) int verbosityLevel;
 @end
 
 /*
@@ -67,8 +69,9 @@
 
 @implementation ShareViewController
 
-@synthesize verbosityLevel = _verbosityLevel;
+@synthesize fileManager = _fileManager;
 @synthesize userDefaults = _userDefaults;
+@synthesize verbosityLevel = _verbosityLevel;
 
 - (void) log:(int)level message:(NSString*)message {
   if (level >= self.verbosityLevel) {
@@ -84,6 +87,7 @@
 - (void) setup {
   [self debug:@"[setup]"];
 
+  self.fileManager = [NSFileManager defaultManager];
   self.userDefaults = [[NSUserDefaults alloc] initWithSuiteName:SHAREEXT_GROUP_IDENTIFIER];
   self.verbosityLevel = [self.userDefaults integerForKey:@"verbosityLevel"];
 }
@@ -135,16 +139,59 @@
   for (NSItemProvider* itemProvider in ((NSExtensionItem*)self.extensionContext.inputItems[0]).attachments) {
     [self debug:[NSString stringWithFormat:@"item provider registered indentifiers = %@", itemProvider.registeredTypeIdentifiers]];
 
-    // IMAGE
-    if ([itemProvider hasItemConformingToTypeIdentifier:@"public.image"]) {
+    // MOVIE
+    if ([itemProvider hasItemConformingToTypeIdentifier:@"public.movie"]) {
       [self debug:[NSString stringWithFormat:@"item provider = %@", itemProvider]];
 
-      if (([lastDataType length] > 0) && ![lastDataType isEqualToString:@"public.image"]) {
+      if (([lastDataType length] > 0) && ![lastDataType isEqualToString:@"MOVIE_OR_IMAGE"]) {
         --remainingAttachments;
         continue;
       }
 
-      lastDataType = [NSString stringWithFormat:@"public.image"];
+      lastDataType = [NSString stringWithFormat:@"MOVIE_OR_IMAGE"];
+
+      [itemProvider loadItemForTypeIdentifier:@"public.movie" options:nil completionHandler: ^(NSURL* item, NSError *error) {
+        NSString *fileUrl = [self saveFileToAppGroupFolder:item];
+        NSString *suggestedName = item.lastPathComponent;
+
+        NSString *uti = @"public.movie";
+        NSString *registeredType = nil;
+
+        if ([itemProvider.registeredTypeIdentifiers count] > 0) {
+          registeredType = itemProvider.registeredTypeIdentifiers[0];
+        } else {
+          registeredType = uti;
+        }
+
+        NSString *mimeType =  [self mimeTypeFromUti:registeredType];
+        NSDictionary *dict = @{
+          @"text" : self.contentText,
+          @"fileUrl" : fileUrl,
+          @"uti"  : uti,
+          @"utis" : itemProvider.registeredTypeIdentifiers,
+          @"name" : suggestedName,
+          @"type" : mimeType
+        };
+
+        [items addObject:dict];
+
+        --remainingAttachments;
+        if (remainingAttachments == 0) {
+          [self sendResults:results];
+        }
+      }];
+    }
+
+    // IMAGE
+    else if ([itemProvider hasItemConformingToTypeIdentifier:@"public.image"]) {
+      [self debug:[NSString stringWithFormat:@"item provider = %@", itemProvider]];
+
+      if (([lastDataType length] > 0) && ![lastDataType isEqualToString:@"MOVIE_OR_IMAGE"]) {
+        --remainingAttachments;
+        continue;
+      }
+
+      lastDataType = [NSString stringWithFormat:@"MOVIE_OR_IMAGE"];
 
       [itemProvider loadItemForTypeIdentifier:@"public.image" options:nil completionHandler: ^(NSURL* item, NSError *error) {
         NSData *data = [NSData dataWithContentsOfURL:(NSURL*)item];
@@ -183,12 +230,12 @@
     else if ([itemProvider hasItemConformingToTypeIdentifier:@"public.url"]) {
       [self debug:[NSString stringWithFormat:@"item provider = %@", itemProvider]];
 
-      if ([lastDataType length] > 0 && ![lastDataType isEqualToString:@"public.url"]) {
+      if ([lastDataType length] > 0 && ![lastDataType isEqualToString:@"URL"]) {
         --remainingAttachments;
         continue;
       }
 
-      lastDataType = [NSString stringWithFormat:@"public.url"];
+      lastDataType = [NSString stringWithFormat:@"URL"];
 
       [itemProvider loadItemForTypeIdentifier:@"public.url" options:nil completionHandler: ^(NSURL* item, NSError *error) {
         [self debug:[NSString stringWithFormat:@"public.url = %@", item]];
@@ -215,12 +262,12 @@
     else if ([itemProvider hasItemConformingToTypeIdentifier:@"public.text"]) {
       [self debug:[NSString stringWithFormat:@"item provider = %@", itemProvider]];
 
-      if ([lastDataType length] > 0 && ![lastDataType isEqualToString:@"public.text"]) {
+      if ([lastDataType length] > 0 && ![lastDataType isEqualToString:@"TEXT"]) {
         --remainingAttachments;
         continue;
       }
 
-      lastDataType = [NSString stringWithFormat:@"public.text"];
+      lastDataType = [NSString stringWithFormat:@"TEXT"];
 
       [itemProvider loadItemForTypeIdentifier:@"public.text" options:nil completionHandler: ^(NSString* item, NSError *error) {
         [self debug:[NSString stringWithFormat:@"public.text = %@", item]];
@@ -282,6 +329,13 @@
   NSString *ret = (__bridge_transfer NSString *)cret;
 
   return ret == nil ? uti : ret;
+}
+
+- (NSString *) saveFileToAppGroupFolder: (NSURL*)url {
+  NSURL *targetUrl = [[self.fileManager containerURLForSecurityApplicationGroupIdentifier:SHAREEXT_GROUP_IDENTIFIER] URLByAppendingPathComponent:url.lastPathComponent];
+  [self.fileManager copyItemAtURL:url toURL:targetUrl error:nil];
+
+  return targetUrl.absoluteString;
 }
 
 @end

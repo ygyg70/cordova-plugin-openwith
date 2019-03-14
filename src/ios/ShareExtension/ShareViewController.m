@@ -130,12 +130,21 @@
     @"items": items,
   };
 
+  NSString *lastDataType = @"";
+
   for (NSItemProvider* itemProvider in ((NSExtensionItem*)self.extensionContext.inputItems[0]).attachments) {
     [self debug:[NSString stringWithFormat:@"item provider registered indentifiers = %@", itemProvider.registeredTypeIdentifiers]];
 
     // IMAGE
     if ([itemProvider hasItemConformingToTypeIdentifier:@"public.image"]) {
       [self debug:[NSString stringWithFormat:@"item provider = %@", itemProvider]];
+
+      if (([lastDataType length] > 0) && ![lastDataType isEqualToString:@"public.image"]) {
+        --remainingAttachments;
+        continue;
+      }
+
+      lastDataType = [NSString stringWithFormat:@"public.image"];
 
       [itemProvider loadItemForTypeIdentifier:@"public.image" options:nil completionHandler: ^(NSURL* item, NSError *error) {
         NSData *data = [NSData dataWithContentsOfURL:(NSURL*)item];
@@ -174,6 +183,13 @@
     else if ([itemProvider hasItemConformingToTypeIdentifier:@"public.url"]) {
       [self debug:[NSString stringWithFormat:@"item provider = %@", itemProvider]];
 
+      if ([lastDataType length] > 0 && ![lastDataType isEqualToString:@"public.url"]) {
+        --remainingAttachments;
+        continue;
+      }
+
+      lastDataType = [NSString stringWithFormat:@"public.url"];
+
       [itemProvider loadItemForTypeIdentifier:@"public.url" options:nil completionHandler: ^(NSURL* item, NSError *error) {
         [self debug:[NSString stringWithFormat:@"public.url = %@", item]];
 
@@ -198,6 +214,13 @@
     // TEXT
     else if ([itemProvider hasItemConformingToTypeIdentifier:@"public.text"]) {
       [self debug:[NSString stringWithFormat:@"item provider = %@", itemProvider]];
+
+      if ([lastDataType length] > 0 && ![lastDataType isEqualToString:@"public.text"]) {
+        --remainingAttachments;
+        continue;
+      }
+
+      lastDataType = [NSString stringWithFormat:@"public.text"];
 
       [itemProvider loadItemForTypeIdentifier:@"public.text" options:nil completionHandler: ^(NSString* item, NSError *error) {
         [self debug:[NSString stringWithFormat:@"public.text = %@", item]];

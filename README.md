@@ -83,10 +83,26 @@ function setupOpenwith() {
       console.log('  text: ', item.text);   // text to share alongside the item. as we don't allow user to enter text in native UI, in most cases this will be empty. However for sharing pages from Safari this might contain the title of the shared page.
       console.log('  name: ', item.name);   // suggested name of the image. For instance: "IMG_0404.JPG"
       console.log('  utis: ', item.utis);   // some optional additional info
+
+      // Read file with Cordova’s file plugin
+      if (item.fileUrl) {
+        resolveLocalFileSystemURL(item.fileUrl, (fileEntry) => {
+          fileEntry.file((file) => {
+            let mediaType = file.type.split('/')[0].toLowerCase()
+
+            if (mediaType == 'image') {
+              let reader = new FileReader
+
+              reader.readAsDataURL(file)
+              reader.onloadend = () => {
+                // Can use this for an <img> tag
+                file.src = reader.result
+              }
+            }
+          })
+        })
+      }
     }
-    // ...
-    // Here, you probably want to do something useful with the data
-    // ...
   }
 }
 ```

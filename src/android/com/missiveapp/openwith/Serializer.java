@@ -113,7 +113,7 @@ class Serializer {
         final JSONObject json = new JSONObject();
         final String type = contentResolver.getType(uri);
         json.put("type", type);
-        json.put("uri", uri);
+        json.put("fileUrl", uri);
         json.put("path", getRealPathFromURI(contentResolver, uri));
         return json;
     }

@@ -61,7 +61,6 @@
   },
   "# White list the files to pack by npm publish": "",
   "files": [
-    "src/android/com/missiveapp/openwith/ByteStreams.java",
     "src/android/com/missiveapp/openwith/OpenWithPlugin.java",
     "src/android/com/missiveapp/openwith/PluginResultSender.java",
     "src/android/com/missiveapp/openwith/Serializer.java",

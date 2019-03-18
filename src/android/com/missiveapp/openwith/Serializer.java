@@ -8,9 +8,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Base64;
-import java.io.IOException;
-import java.io.InputStream;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -120,20 +117,6 @@ class Serializer {
         json.put("type", type);
 
         return json;
-    }
-
-    /** Return data contained at a given Uri as Base64. Defaults to null. */
-    public static String getDataFromURI(
-            final ContentResolver contentResolver,
-            final Uri uri) {
-        try {
-            final InputStream inputStream = contentResolver.openInputStream(uri);
-            final byte[] bytes = ByteStreams.toByteArray(inputStream);
-            return Base64.encodeToString(bytes, Base64.DEFAULT);
-        }
-        catch (IOException e) {
-            return "";
-        }
     }
 
 	/** Convert the Uri to the direct file system path of the image file.

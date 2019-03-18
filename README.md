@@ -10,10 +10,7 @@ This is a bit modified version of [cordova-plugin-openwith](https://github.com/j
 
 - **Works with several types of shared data** (UTIs). Currently, URLs, text and images are supported. If you would like to remove any of these types, feel free to edit ShareExtension-Info.plist (NSExtensionActivationRule section) after plugin's installation
 - **Support of sharing several photos at once is supported**. By default, the maximum number is 10, but this can be easily edited in the plugin's .plist file
-- **Ability to check if the user is logged in or not in your app**. If not logged in, a native interface alert message will be displayed instead of starting your app.
 - **Does not show native UI with "Post" option**. Having two-step share (enter sharing message and then pick the receiver in the Cordova app) might be a bad user experience, so this plugin opens Cordova application immediately and passes the shared data to it. Thereby, you are expected to implement sharing UI in your Cordova app.
-
-This plugin refers only to iOS, so the Android parts have been cut out both from the plugin and documentation.
 
 You'd like your app to be listed in the **Send to...** section for certain types of files, on both **Android** and **iOS**? This is THE plugin! No need to meddle into Android's manifests and iOS's plist files, it's (almost) all managed for you by a no brainer one liner installation command.
 
@@ -131,10 +128,6 @@ A data descriptor describe one file. It is a javascript object with the followin
  - `text`: test description of the share, generally empty
  - `name`: suggested file name
  - `utis`: list of UTIs the file belongs to.
-
-### cordova.openwith.load(dataDescriptor, loadSuccessCallback, loadErrorCallback)
-
-Load data for an item. For this modification, it is not necessary,
 
 ## Contribute
 

@@ -8,32 +8,38 @@ import org.apache.cordova.PluginResult;
  */
 @SuppressWarnings("PMD.ShortMethodName")
 class PluginResultSender {
+  /** Send an INVALID_ACTION error. */
+  public static boolean invalidAction(
+          final CallbackContext context)
+  {
+    final PluginResult result = new PluginResult(PluginResult.Status.INVALID_ACTION);
+    context.sendPluginResult(result);
 
-    /** Send an INVALID_ACTION error. */
-    public static boolean invalidAction(
-            final CallbackContext context) {
-        final PluginResult result = new PluginResult(PluginResult.Status.INVALID_ACTION);
-        context.sendPluginResult(result);
-        return false;
-    }
+    return false;
+  }
 
-    /** Send NO_RESULT.
-     * We generally keep the callback for a later call,so this is left as
-     * an option to this method. */
-    public static boolean noResult(
-            final CallbackContext context,
-            final boolean keepCallback) {
-        final PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT);
-        result.setKeepCallback(keepCallback);
-        context.sendPluginResult(result);
-        return true;
-    }
+  /** Send NO_RESULT.
+   * We generally keep the callback for a later call,so this is left as
+   * an option to this method. */
+  public static boolean noResult(
+          final CallbackContext context,
+          final boolean keepCallback)
+  {
+    final PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT);
 
-    /** Send OK. */
-    public static boolean ok(
-            final CallbackContext context) {
-        final PluginResult result = new PluginResult(PluginResult.Status.OK);
-        context.sendPluginResult(result);
-        return true;
-    }
+    result.setKeepCallback(keepCallback);
+    context.sendPluginResult(result);
+
+    return true;
+  }
+
+  /** Send OK. */
+  public static boolean ok(
+          final CallbackContext context)
+  {
+    final PluginResult result = new PluginResult(PluginResult.Status.OK);
+    context.sendPluginResult(result);
+
+    return true;
+  }
 }

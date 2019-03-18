@@ -7,7 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.webkit.URLUtil;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -142,10 +142,9 @@ class Serializer {
   /** Convert an Uri to JSON object.
    *
    * Object will include:
+   *    "fileUrl" itself;
    *    "type" of data;
-   *    "uri" itself;
-   *    "path" to the file, if applicable.
-   *    "data" for the file.
+   *    "name" for the file.
    */
   public static JSONObject toJSONObject(
           final ContentResolver contentResolver,
@@ -158,31 +157,26 @@ class Serializer {
 
     final JSONObject json = new JSONObject();
     final String type = contentResolver.getType(uri);
-    final String path = getRealPathFromURI(contentResolver, uri);
-    final String suggestedName = Uri.parse(path).getLastPathSegment();
+    final String suggestedName = getNamefromURI(contentResolver, uri);
 
     json.put("fileUrl", uri);
-    json.put("name", suggestedName);
     json.put("type", type);
+    json.put("name", suggestedName);
 
     return json;
   }
 
-  /** Convert the Uri to the direct file system path of the image file.
-   *
-   * source: https://stackoverflow.com/questions/20067508/get-real-path-from-uri-android-kitkat-new-storage-access-framework/20402190?noredirect=1#comment30507493_20402190 */
-  public static String getRealPathFromURI(
+  public static String getNamefromURI(
           final ContentResolver contentResolver,
           final Uri uri)
   {
-    final String[] proj = { MediaStore.Images.Media.DATA };
-    final Cursor cursor = contentResolver.query(uri, proj, null, null, null);
+    final Cursor cursor = contentResolver.query(uri, null, null, null, null);
 
     if (cursor == null) {
       return "";
     }
 
-    final int column_index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+    final int column_index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
     if (column_index < 0) {
       cursor.close();
       return "";

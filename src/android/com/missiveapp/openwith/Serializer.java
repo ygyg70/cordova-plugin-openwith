@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.webkit.URLUtil;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,7 +30,9 @@ class Serializer {
   {
     JSONArray items = null;
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+    if ("text/plain".equals(intent.getType())) {
+      items = itemsFromIntent(intent);
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
       items = itemsFromClipData(contentResolver, intent.getClipData());
     }
 
@@ -57,6 +60,34 @@ class Serializer {
     }
 
     return action;
+  }
+
+  /** Extract the list of items from an intent (plain text).
+   *
+   * Defaults to null. */
+  public static JSONArray itemsFromIntent(
+         final Intent intent)
+        throws JSONException
+  {
+    if (intent != null) {
+      String text = intent.getStringExtra(Intent.EXTRA_TEXT);
+      String type = "text/plain";
+
+      if (URLUtil.isValidUrl(text)) {
+        type = "url";
+      }
+
+      final JSONObject json = new JSONObject();
+      json.put("data", text);
+      json.put("type", type);
+
+      JSONObject[] items = new JSONObject[1];
+      items[0] = json;
+
+      return new JSONArray(items);
+    }
+
+    return null;
   }
 
   /** Extract the list of items from clip data (if available).

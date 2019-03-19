@@ -58,27 +58,5 @@
     "eslint-watch": "^3.1.2",
     "expect.js": "^0.3.1",
     "mocha": "^3.5.3"
-  },
-  "# White list the files to pack by npm publish": "",
-  "files": [
-    "src/android/com/missiveapp/openwith/OpenWithPlugin.java",
-    "src/android/com/missiveapp/openwith/PluginResultSender.java",
-    "src/android/com/missiveapp/openwith/Serializer.java",
-    "src/ios/OpenWithPlugin.m",
-    "src/ios/ShareExtension/MainInterface.storyboard",
-    "src/ios/ShareExtension/ShareExtension-Info.plist",
-    "src/ios/ShareExtension/ShareViewController.h",
-    "src/ios/ShareExtension/ShareViewController.m",
-    "www/openwith.js",
-    "www/test-openwith.js",
-    "hooks/iosAddTarget.js",
-    "hooks/iosRemoveTarget.js",
-    "hooks/iosCopyShareExtension.js",
-    "hooks/npmInstall.js",
-    "install-pmd",
-    "plugin.xml",
-    "LICENSE",
-    "README.md",
-    "package.json"
-  ]
+  }
 }

@@ -34,8 +34,8 @@ SOFTWARE.
   <engines>
     <engine name="cordova" version=">=6.0.0" />
   </engines>
-  <repo>https://github.com/missive/cordova-plugin-openwith.git</repo>
-  <issue>https://github.com/missive/cordova-plugin-openwith/issues</issue>
+  <repo>https://github.com/ygyg70/cordova-plugin-openwith.git</repo>
+  <issue>https://github.com/ygyg70/cordova-plugin-openwith/issues</issue>
   <license>MIT</license>
   <keywords>cordova,phonegap,openwith,ios,android</keywords>
 

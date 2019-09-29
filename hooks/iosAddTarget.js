@@ -19,7 +19,7 @@ const FILE_TYPES = {
 };
 
 function parsePbxProject(context, pbxProjectPath) {
-  var xcode = context.requireCordovaModule('xcode');
+  var xcode = require('xcode');
   log(`Parsing existing project at location: ${pbxProjectPath}…`);
 
   var pbxProject;
@@ -62,7 +62,7 @@ function getShareExtensionFiles(context) {
 module.exports = function(context) {
   log('Adding ShareExt target to XCode project')
 
-  var Q = context.requireCordovaModule('q');
+  var Q = require('q');
   var deferral = new Q.defer();
 
   findXCodeproject(context, function(projectFolder, projectName) {

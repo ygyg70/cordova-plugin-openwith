@@ -62,6 +62,9 @@
       NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
 
       // Arguments
+      NSDictionary<NSString *, id> *options = [NSDictionary dictionary];
+      void (^completion)(BOOL success) = ^void(BOOL success) {};
+
       if (@available(iOS 13.0, *)) {
           UISceneOpenExternalURLOptions * options = [[UISceneOpenExternalURLOptions alloc] init];
           options.universalLinksOnly = false;

@@ -64,7 +64,6 @@
       // Arguments
       NSDictionary<NSString *, id> *options = [NSDictionary dictionary];
       void (^completion)(BOOL success) = ^void(BOOL success) {};
-
       if (@available(iOS 13.0, *)) {
           UISceneOpenExternalURLOptions * options = [[UISceneOpenExternalURLOptions alloc] init];
           options.universalLinksOnly = false;
@@ -155,12 +154,12 @@
     // IMAGE
     else if ([itemProvider hasItemConformingToTypeIdentifier:@"public.image"]) {
       [self debug:[NSString stringWithFormat:@"item provider = %@", itemProvider]];
-
+/*
       if (([lastDataType length] > 0) && ![lastDataType isEqualToString:@"FILE"]) {
         --remainingAttachments;
         continue;
       }
-
+*/
       lastDataType = [NSString stringWithFormat:@"FILE"];
 
       [itemProvider loadItemForTypeIdentifier:@"public.image" options:nil completionHandler: ^(NSURL* item, NSError *error) {
@@ -241,12 +240,12 @@
     // URL
     else if ([itemProvider hasItemConformingToTypeIdentifier:@"public.url"]) {
       [self debug:[NSString stringWithFormat:@"item provider = %@", itemProvider]];
-
+/*
       if ([lastDataType length] > 0 && ![lastDataType isEqualToString:@"URL"]) {
         --remainingAttachments;
         continue;
       }
-
+*/
       lastDataType = [NSString stringWithFormat:@"URL"];
 
       [itemProvider loadItemForTypeIdentifier:@"public.url" options:nil completionHandler: ^(NSURL* item, NSError *error) {
@@ -273,12 +272,12 @@
     // TEXT
     else if ([itemProvider hasItemConformingToTypeIdentifier:@"public.text"]) {
       [self debug:[NSString stringWithFormat:@"item provider = %@", itemProvider]];
-
+/*
       if ([lastDataType length] > 0 && ![lastDataType isEqualToString:@"TEXT"]) {
         --remainingAttachments;
         continue;
       }
-
+*/
       lastDataType = [NSString stringWithFormat:@"TEXT"];
 
       [itemProvider loadItemForTypeIdentifier:@"public.text" options:nil completionHandler: ^(NSString* item, NSError *error) {

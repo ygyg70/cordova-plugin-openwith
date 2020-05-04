@@ -2443,9 +2443,10 @@ write@^0.2.1:
   dependencies:
     mkdirp "^0.5.1"
 
-"xcode@git+https://github.com/apache/cordova-node-xcode.git":
-  version "2.0.1-dev"
-  resolved "git+https://github.com/apache/cordova-node-xcode.git#a65e1943ed8c71d93e4c673d0a7aabf4ebca7623"
+xcode@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/xcode/-/xcode-2.0.0.tgz#134f1f94c26fbfe8a9aaa9724bfb2772419da1a2"
+  integrity sha512-5xF6RCjAdDEiEsbbZaS/gBRt3jZ/177otZcpoLCjGN/u1LrfgH7/Sgeeavpr/jELpyDqN2im3AKosl2G2W8hfw==
   dependencies:
     simple-plist "^1.0.0"
     uuid "^3.3.2"

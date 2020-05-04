@@ -62,8 +62,7 @@ function getShareExtensionFiles(context) {
 module.exports = function(context) {
   log('Adding ShareExt target to XCode project')
 
-  var Q = require('q');
-  var deferral = new Q.defer();
+  var deferral = require('q').defer();
 
   findXCodeproject(context, function(projectFolder, projectName) {
     var preferences = getPreferences(context, projectName);
@@ -77,7 +76,7 @@ module.exports = function(context) {
     });
 
     // Find if the project already contains the target and group
-    var target = pbxProject.pbxTargetByName('ShareExt');
+    var target = pbxProject.pbxTargetByName('ShareExt') || pbxProject.pbxTargetByName('"ShareExt"');
     if (target) { log('ShareExt target already exists') }
 
     if (!target) {
@@ -95,9 +94,9 @@ module.exports = function(context) {
 
     // Create a separate PBXGroup for the shareExtensions files, name has to be unique and path must be in quotation marks
     var pbxGroupKey = pbxProject.findPBXGroupKey({name: 'ShareExtension'});
-    if (pbxProject) { log('ShareExtension group already exists') }
-
-    if (!pbxGroupKey) {
+    if (pbxGroupKey) {
+      log('ShareExtension group already exists')
+    } else {
       pbxGroupKey = pbxProject.pbxCreateGroup('ShareExtension', 'ShareExtension');
 
       // Add the PbxGroup to cordovas "CustomTemplate"-group

@@ -91,9 +91,9 @@ SOFTWARE.
 
     <!-- Cordova hooks -->
     <hook type="before_plugin_install" src="hooks/npmInstall.js" />
-    <hook type="before_plugin_install" src="hooks/iosCopyShareExtension.js" />
-    <hook type="after_plugin_install" src="hooks/iosAddTarget.js" />
-    <hook type="after_prepare" src="hooks/iosCopyShareExtension.js" />
+    <hook type="after_plugin_install" src="hooks/iosCopyShareExtension.js" />
+    <hook type="after_plugin_add" src="hooks/iosAddTarget.js" />
+    <hook type="after_prepare" src="hooks/iosAddTarget.js" />
 
     <!-- Dependencies -->
     <framework src="MobileCoreServices.framework" />
